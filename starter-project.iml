@@ -12,7 +12,7 @@
       </configuration>
       <facet type="google-app-engine" name="Google App Engine">
         <configuration>
-          <sdk-home-path>$USER_HOME$/tools/appengine-java-sdk-1.7.1</sdk-home-path>
+          <sdk-home-path>/Applications/appengine-java-sdk-1.7.4</sdk-home-path>
         </configuration>
       </facet>
     </facet>
@@ -24,7 +24,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="AppEngine API" level="project" />
+    <orderEntry type="library" exported="" name="AppEngine API" level="project" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
     <orderEntry type="library" name="lib" level="project" />
   </component>
