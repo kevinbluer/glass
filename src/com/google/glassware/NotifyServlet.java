@@ -38,6 +38,11 @@ import java.io.Writer;
 import java.util.List;
 import java.util.logging.Logger;
 
+import java.util.Date;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+
 /**
  * Handles the PubSub verification GET step and receives notifications
  *
@@ -80,7 +85,7 @@ public class NotifyServlet extends HttpServlet {
       Glass glass = GlassClient.getGlass(credential);
       Location location = glass.locations().get(notification.getItemId()).execute(); // usually 'latest'
 
-      LOG.info("New locatin is " + location.getLatitude() + ", " + location.getLongitude());
+      LOG.info("New location is " + location.getLatitude() + ", " + location.getLongitude());
       GlassClient.insertTimelineItem(credential,
           new TimelineItem().setText("You are now at " +
               location.getLatitude() + ", " + location.getLongitude()).setNotification(
@@ -101,8 +106,7 @@ public class NotifyServlet extends HttpServlet {
 
           //TODO: Winona: this is where we'll want to add code that handles the incoming timeline notifications
           // -grab the attachment off of the item (if it exists)
-          // -grab text off of a voice reply
-          // dump the stuff into the data store for use in the view - https://developers.google.com/appengine/docs/java/datastore/entities
+
         // Get the first attachment
         attachmentId = attachments.get(0).getId();
         LOG.info("Found attachment with ID " + attachmentId);
@@ -110,9 +114,23 @@ public class NotifyServlet extends HttpServlet {
         // Get the attachment content
         InputStream stream = GlassClient.getAttachmentInputStream(credential, timelineItem.getId(), attachmentId);
 
+        // -grab text off of a voice reply?
+
+        // dump the stuff into the data store for use in the view - https://developers.google.com/appengine/docs/java/datastore/entities
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        Entity report = new Entity("Report");
+        report.setProperty("reporter", userId);
+        report.setProperty("media", stream);
+        Date reportDate = new Date();
+        report.setProperty("reportDate", reportDate);
+        report.setProperty("publish", true);
+
+        datastore.put(report);
+
         // Create a new timeline item with the attachment
         GlassClient.insertTimelineItem(credential,
-            new TimelineItem().setText("Echoing your shared item").setNotification(
+            new TimelineItem().setText("Your news report has been received").setNotification(
                 new NotificationConfig().setLevel("audio_only")),
             "image/jpeg", stream);
       } else {
