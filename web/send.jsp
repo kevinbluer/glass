@@ -1,3 +1,25 @@
+<%@ page import="com.google.api.client.auth.oauth2.Credential" %>
+<%@ page import="com.google.api.services.glass.model.Entity" %>
+<%@ page import="com.google.glassware.GlassClient" %>
+<%@ page import="com.google.glassware.WebUtil" %>
+<%@ page
+    import="java.util.List" %>
+<%@ page import="com.google.api.services.glass.model.TimelineItem" %>
+<%@ page import="com.google.api.services.glass.model.Subscription" %>
+<%@ page import="com.google.api.services.glass.model.Attachment" %>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+  String userId = com.google.glassware.AuthUtil.getUserId(request);
+  String appBaseUrl = WebUtil.buildUrl(request, "/");
+
+  Credential credential = com.google.glassware.AuthUtil.getCredential(userId);
+  List<Entity> shareTargets = GlassClient.listSharetargets(credential).getItems();
+  List<TimelineItem> timelineItems = GlassClient.listItems(credential,5L).getItems();
+  List<Subscription> subscriptions = GlassClient.listSubscriptions(credential).getItems();
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +28,7 @@
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
   <title>Eye Report</title>
 
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.0.min.js"></script>
   <link href="css/application.css" media="screen" rel="stylesheet" type="text/css" />
 
   <!--[if lt IE 9]>
@@ -120,13 +143,45 @@
           </span>
         </span>
       </div>
-      <form class="fill-up">
+      <form class="fill-up" action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <div class="row-fluid">
           <div class="span12">
             <div class="padded">
               <div class="input">
-                <input type="text" placeholder="Dispatch Title"/>
+                <input type="hidden" name="imageUrl" id="imageUrl" value="<%= appBaseUrl + "static/icons/noun_project_conflict.png" %>" />
+                <input type="hidden" name="operation" value="insertItem">
+                <input type="hidden" name="contentType" value="image/png">
+                <input id="dispatchTitle" type="text" placeholder="Dispatch Title"/>
+                <img class="selectionImage" src="<%= appBaseUrl + "static/icons/noun_project_info.png" %>">
+                <img class="selectionImage" src="<%= appBaseUrl + "static/icons/noun_project_omg.png" %>">
+                <img class="selectionImage selectedImage" src="<%= appBaseUrl + "static/icons/noun_project_conflict.png" %>">
+                <input type="text" name="message" id="message">
               </div>
+              <style>
+              .selectionImage { width: 32px; hover: }
+              .selectedImage { border: 1px solid black;}
+              .selectionImage:hover{
+              opacity:0.4;
+              filter:alpha(opacity=40); /* For IE8 and earlier */
+              }
+              </style>
+
+              <script>
+              $("body").on("click", ".selectionImage", function (e) {
+
+                  $(".selectionImage").removeClass("selectedImage");
+                  var $e = $(e.currentTarget);
+                  var src = $e.attr("src");
+                  console.log("1:" + src);
+                  $e.addClass("selectedImage");
+                  $("#imageUrl").val(src);
+                  console.log("1:" + src);
+              });
+              $("body").on("mouseover", "submit", function (e) {
+              console.log(2);
+                                  $("#message").val("<p>"+$("#dispatchTitle").val() + "</p>"+$("dispatchDetail").text());
+              })
+              </script>
 
               <div class="input">
                 <select name="city" id="city" placeholder="City" class="fill-up chzn-select">
@@ -143,7 +198,7 @@
               </div>
 
                 <div class="input" style="padding-top: 10px;">
-                    <textarea placeholder="Dispatch Detail..." rows="6"></textarea>
+                    <textarea id="dispatchDetail" placeholder="Dispatch Detail..." rows="6"></textarea>
                 </div>
 
               <div class="input">
