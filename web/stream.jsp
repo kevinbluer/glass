@@ -8,6 +8,10 @@
 <%@ page import="com.google.api.services.glass.model.Subscription" %>
 <%@ page import="com.google.api.services.glass.model.Attachment" %>
 
+<%@ page import="com.google.glassware.GlassStream" %>
+
+<%@ page import="com.google.appengine.api.datastore.PreparedQuery" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <%
@@ -20,6 +24,7 @@
     List<Subscription> subscriptions = GlassClient.listSubscriptions(credential).getItems();
 
 %>
+
 <html>
 <head>
   <meta charset="utf-8">
@@ -131,16 +136,33 @@
  
 
 <div class="row-fluid">
-  <div class="span4">
-    <div class="box">
-      <div class="tab-header">
-        <i class="icon-th-list"></i> Reporter: Kevin Bluer
-      </div>
-      <div class="padded">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </div>
+
+    <%
+        PreparedQuery reports = GlassStream.getReports();
+
+        for (com.google.appengine.api.datastore.Entity result : reports.asIterable()) {
+            String reportUrl = result.getProperty("media").toString();
+            String reportReporter = result.getProperty("reporter").toString();
+            String reportDate = result.getProperty("reportDate").toString();
+    %>
+
+    <div class="span4">
+        <div class="box">
+            <div class="tab-header">
+                <i class="icon-th-list"></i> Reporter: <%= reportReporter %>
+            </div>
+            <div class="padded">
+               <img src='<%= reportUrl %>'>
+               <div style='padding-top:10px;'><%= reportDate %>></div>
+            </div>
+        </div>
     </div>
-  </div>
+
+<%
+    }
+%>
+
+  <!--
   <div class="span4">
     <div class="box">
       <div class="tab-header">
@@ -160,7 +182,7 @@
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       </div>
     </div>
-  </div>
+  </div>-->
 </div>
 
 
