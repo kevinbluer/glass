@@ -125,7 +125,7 @@ public class NotifyServlet extends HttpServlet {
 
         Entity report = new Entity("Report");
         report.setProperty("reporter", userId);
-        report.setProperty("media", "hello");
+        report.setProperty("media", "https://lh6.googleusercontent.com/-HcO5aMj1C14/UQ1NzpEsjSI/AAAAAAAAAE8/brC2M_T75VM/s811/20130202_093253_194.jpg");
         Date reportDate = new Date();
         report.setProperty("reportDate", reportDate);
         report.setProperty("publish", true);
