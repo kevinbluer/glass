@@ -74,7 +74,7 @@
       <file leaf-file-name="NotifyServlet.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/google/glassware/NotifyServlet.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="110" column="14" selection-start="4815" selection-end="4815" vertical-scroll-proportion="0.0">
+            <state line="112" column="14" selection-start="4914" selection-end="4914" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -83,7 +83,7 @@
       <file leaf-file-name="send.jsp" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/send.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="253" column="44" selection-start="12110" selection-end="12110" vertical-scroll-proportion="0.39481267">
+            <state line="253" column="44" selection-start="12109" selection-end="12110" vertical-scroll-proportion="5.3659945">
               <folding />
             </state>
           </provider>
@@ -92,8 +92,10 @@
       <file leaf-file-name="stream.jsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/stream.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="76" selection-start="4972" selection-end="4972" vertical-scroll-proportion="-3.625">
-              <folding />
+            <state line="156" column="76" selection-start="5324" selection-end="5324" vertical-scroll-proportion="-3.625">
+              <folding>
+                <marker date="1359827795000" expanded="true" signature="6198:6232" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -727,7 +729,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/google/glassware/NotifyServlet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="110" column="14" selection-start="4815" selection-end="4815" vertical-scroll-proportion="0.0">
+        <state line="112" column="14" selection-start="4914" selection-end="4914" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -848,14 +850,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web/stream.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="76" selection-start="4972" selection-end="4972" vertical-scroll-proportion="-3.625">
-          <folding />
+        <state line="156" column="76" selection-start="5324" selection-end="5324" vertical-scroll-proportion="-3.625">
+          <folding>
+            <marker date="1359827795000" expanded="true" signature="6198:6232" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/send.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="253" column="44" selection-start="12110" selection-end="12110" vertical-scroll-proportion="0.39481267">
+        <state line="253" column="44" selection-start="12109" selection-end="12110" vertical-scroll-proportion="5.3659945">
           <folding />
         </state>
       </provider>

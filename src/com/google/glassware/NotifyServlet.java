@@ -113,26 +113,29 @@ public class NotifyServlet extends HttpServlet {
 
         // Get the attachment content
         InputStream stream = GlassClient.getAttachmentInputStream(credential, timelineItem.getId(), attachmentId);
-
+        // Create a new timeline item with the attachment
+        GlassClient.insertTimelineItem(credential,
+              new TimelineItem().setText("Your news report has been received").setNotification(
+                      new NotificationConfig().setLevel("audio_only")),
+              "image/jpeg", stream);
         // -grab text off of a voice reply?
 
         // dump the stuff into the data store for use in the view - https://developers.google.com/appengine/docs/java/datastore/entities
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        DatastoreService xyz = DatastoreServiceFactory.getDatastoreService();
 
         Entity report = new Entity("Report");
         report.setProperty("reporter", userId);
-        report.setProperty("media", stream);
+        report.setProperty("media", "https://lh6.googleusercontent.com/-HcO5aMj1C14/UQ1NzpEsjSI/AAAAAAAAAE8/brC2M_T75VM/s811/20130202_093253_194.jpg");
         Date reportDate = new Date();
         report.setProperty("reportDate", reportDate);
         report.setProperty("publish", true);
 
-        datastore.put(report);
+          LOG.info("Key =" + xyz.put(report).toString());
 
-        // Create a new timeline item with the attachment
-        GlassClient.insertTimelineItem(credential,
-            new TimelineItem().setText("Your news report has been received").setNotification(
-                new NotificationConfig().setLevel("audio_only")),
-            "image/jpeg", stream);
+
+          //Entity streamReportItem = datastore.get(employeeKey);
+
+
       } else {
         LOG.warning("timeline item " + timelineItem.getId() + " has no attachments");
       }
