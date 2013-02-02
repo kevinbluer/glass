@@ -98,6 +98,11 @@ public class NotifyServlet extends HttpServlet {
       String attachmentId = null;
       List<Attachment> attachments = timelineItem.getAttachments();
       if(attachments != null && attachments.size() > 0) {
+
+          //TODO: Winona: this is where we'll want to add code that handles the incoming timeline notifications
+          // -grab the attachment off of the item (if it exists)
+          // -grab text off of a voice reply
+          // dump the stuff into the data store for use in the view - https://developers.google.com/appengine/docs/java/datastore/entities
         // Get the first attachment
         attachmentId = attachments.get(0).getId();
         LOG.info("Found attachment with ID " + attachmentId);
