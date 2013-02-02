@@ -1,10 +1,31 @@
+<%@ page import="com.google.api.client.auth.oauth2.Credential" %>
+<%@ page import="com.google.api.services.glass.model.Entity" %>
+<%@ page import="com.google.glassware.GlassClient" %>
+<%@ page import="com.google.glassware.WebUtil" %>
+<%@ page
+        import="java.util.List" %>
+<%@ page import="com.google.api.services.glass.model.TimelineItem" %>
+<%@ page import="com.google.api.services.glass.model.Subscription" %>
+<%@ page import="com.google.api.services.glass.model.Attachment" %>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
+<%
+    String userId = com.google.glassware.AuthUtil.getUserId(request);
+    String appBaseUrl = WebUtil.buildUrl(request, "/stream.jsp");
+
+    Credential credential = com.google.glassware.AuthUtil.getCredential(userId);
+    List<Entity> shareTargets = GlassClient.listSharetargets(credential).getItems();
+    List<TimelineItem> timelineItems = GlassClient.listItems(credential,5L).getItems();
+    List<Subscription> subscriptions = GlassClient.listSubscriptions(credential).getItems();
+
+%>
 <html>
 <head>
   <meta charset="utf-8">
   <!-- Always force latest IE rendering engine or request Chrome Frame -->
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-  <title>Plastique Theme</title>
+  <title>News Stream</title>
 
   <link href="css/application.css" media="screen" rel="stylesheet" type="text/css" />
 
@@ -18,11 +39,11 @@
 <div id="modal" class="black-box modal hide fade">
   <div class="modal-header tab-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <span>Some modal title</span>
+    <span>Reporter: Kevin</span>
   </div>
   <div class="modal-body separator">
-    <h4>Text in a modal</h4>
-    <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem.</p>
+    <h4>2/1/2013 17:06</h4>
+    <p>Big news!</p>
   </div>
   <div class="modal-footer">
     <div class="inner-well">
@@ -113,7 +134,7 @@
   <div class="span4">
     <div class="box">
       <div class="tab-header">
-        <i class="icon-th-list"></i> Span4
+        <i class="icon-th-list"></i> Reporter: Kevin Bluer
       </div>
       <div class="padded">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -123,7 +144,7 @@
   <div class="span4">
     <div class="box">
       <div class="tab-header">
-        <i class="icon-th-list"></i> Span4
+        <i class="icon-th-list"></i> Senior Correspondent: Tom Olson
       </div>
       <div class="padded">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -133,7 +154,7 @@
   <div class="span4">
     <div class="box">
       <div class="tab-header">
-        <i class="icon-th-list"></i> Span4
+        <i class="icon-th-list"></i> Citizen Reporter: Winnie Tong
       </div>
       <div class="padded">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

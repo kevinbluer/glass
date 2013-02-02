@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <!-- Always force latest IE rendering engine or request Chrome Frame -->
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-  <title>Plastique Theme</title>
+  <title>Eye Report</title>
 
   <link href="css/application.css" media="screen" rel="stylesheet" type="text/css" />
 
@@ -113,7 +113,7 @@
   <div class="span12">
     <div class="box">
       <div class="tab-header">
-        Forms
+        Send Dispatch
         <span class="pull-right">
           <span class="options">
             <a href="#"><i class="icon-cog"></i></a>
@@ -291,7 +291,7 @@
     </div>
   </div>
 </script>
-<script src="../../javascripts/application.js" type="text/javascript"></script><script src="../../javascripts/docs.js" type="text/javascript"></script><script src="../../javascripts/docs_charts.js" type="text/javascript"></script><script src="../../javascripts/documentation.js" type="text/javascript"></script><script src="../../javascripts/prettify.js" type="text/javascript"></script><link href="../../stylesheets/prettify.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="js/application.js" type="text/javascript"></script><script src="js/docs.js" type="text/javascript"></script><script src="js/javascripts/docs_charts.js" type="text/javascript"></script><script src="js/javascripts/documentation.js" type="text/javascript"></script><script src="js/prettify.js" type="text/javascript"></script><link href=css/prettify.css" media="screen" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
     prettyPrint()
 </script>

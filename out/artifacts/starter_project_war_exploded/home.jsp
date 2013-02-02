@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <!-- Always force latest IE rendering engine or request Chrome Frame -->
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-  <title>Plastique Theme</title>
+  <title>Eye Report</title>
 
   <link href="css/application.css" media="screen" rel="stylesheet" type="text/css" />
 
