@@ -1,11 +1,34 @@
+<%@ page import="com.google.api.client.auth.oauth2.Credential" %>
+<%@ page import="com.google.api.services.glass.model.Entity" %>
+<%@ page import="com.google.glassware.GlassClient" %>
+<%@ page import="com.google.glassware.WebUtil" %>
+<%@ page
+    import="java.util.List" %>
+<%@ page import="com.google.api.services.glass.model.TimelineItem" %>
+<%@ page import="com.google.api.services.glass.model.Subscription" %>
+<%@ page import="com.google.api.services.glass.model.Attachment" %>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+  String userId = com.google.glassware.AuthUtil.getUserId(request);
+  String appBaseUrl = WebUtil.buildUrl(request, "/");
+
+  Credential credential = com.google.glassware.AuthUtil.getCredential(userId);
+  List<Entity> shareTargets = GlassClient.listSharetargets(credential).getItems();
+  List<TimelineItem> timelineItems = GlassClient.listItems(credential,5L).getItems();
+  List<Subscription> subscriptions = GlassClient.listSubscriptions(credential).getItems();
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <!-- Always force latest IE rendering engine or request Chrome Frame -->
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-  <title>Plastique Theme</title>
+  <title>Eye Report</title>
 
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.0.min.js"></script>
   <link href="css/application.css" media="screen" rel="stylesheet" type="text/css" />
 
   <!--[if lt IE 9]>
@@ -27,7 +50,7 @@
   <div class="modal-footer">
     <div class="inner-well">
       <a class="button mini rounded light-gray" data-dismiss="modal">Close</a>
-      <a class="button mini rounded blue">Save changes</a>
+      <a class="button mini rounded blue">Send Dispatch</a>
     </div>
   </div>
 </div>
@@ -113,55 +136,70 @@
   <div class="span12">
     <div class="box">
       <div class="tab-header">
-        Forms
+        Send Dispatch
         <span class="pull-right">
           <span class="options">
             <a href="#"><i class="icon-cog"></i></a>
           </span>
         </span>
       </div>
-      <form class="fill-up">
+      <form class="fill-up" action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <div class="row-fluid">
-          <div class="span6">
+          <div class="span12">
             <div class="padded">
               <div class="input">
-                <input type="text" placeholder="Email"/>
+                <input type="hidden" name="imageUrl" id="imageUrl" value="<%= appBaseUrl + "static/icons/noun_project_conflict.png" %>" />
+                <input type="hidden" name="operation" value="insertItem">
+                <input type="hidden" name="contentType" value="image/png">
+                <input id="dispatchTitle" type="text" placeholder="Dispatch Title"/>
+                <img class="selectionImage" src="<%= appBaseUrl + "static/icons/noun_project_info.png" %>">
+                <img class="selectionImage" src="<%= appBaseUrl + "static/icons/noun_project_omg.png" %>">
+                <img class="selectionImage selectedImage" src="<%= appBaseUrl + "static/icons/noun_project_conflict.png" %>">
+                <input type="text" name="message" id="message">
               </div>
-              <div class="input">
-                <input type="text" placeholder="Address"/>
-              </div>
-              <div class="input">
-                <input type="text" placeholder="Username" class="error"/>
-                <span class="input-error" data-title="please write a valid username">
-                  <i class="icon-warning-sign"></i>
-                </span>
-              </div>
+              <style>
+              .selectionImage { width: 32px; hover: }
+              .selectedImage { border: 1px solid black;}
+              .selectionImage:hover{
+              opacity:0.4;
+              filter:alpha(opacity=40); /* For IE8 and earlier */
+              }
+              </style>
 
-              <div class="input">
-                <input type="password" placeholder="Password" class="error"/>
-                <span class="input-error" data-title="please write a valid password">
-                  <i class="icon-warning-sign"></i>
-                </span>
-              </div>
+              <script>
+              $("body").on("click", ".selectionImage", function (e) {
 
-              <div class="note pull-right">Please use a secure password</div>
+                  $(".selectionImage").removeClass("selectedImage");
+                  var $e = $(e.currentTarget);
+                  var src = $e.attr("src");
+                  console.log("1:" + src);
+                  $e.addClass("selectedImage");
+                  $("#imageUrl").val(src);
+                  console.log("1:" + src);
+              });
+              $("body").on("mouseover", "submit", function (e) {
+              console.log(2);
+                                  $("#message").val("<p>"+$("#dispatchTitle").val() + "</p>"+$("dispatchDetail").text());
+              })
+              </script>
 
               <div class="input">
                 <select name="city" id="city" placeholder="City" class="fill-up chzn-select">
-                  <option>Seattle</option>
-                  <option>Chicago</option>
+                  <option>San Francisco</option>
                   <option>New York</option>
+                  <option>London</option>
+                  <option>Paris</option>
+                  <option>Berlin</option>
+                  <option>Cairo</option>
+                  <option>Hong Kong</option>
+                  <option>Tokyo</option>
+                  <option style="font-weight: bold;">New Jersey</option>
                 </select>
               </div>
 
-
-              <div class="input" style="padding-top: 20px;">
-                <select style="margin-top: 20px;" multiple="multiple" name="city2" id="city2" placeholder="City" class="fill-up chzn-select">
-                  <option>Seattle</option>
-                  <option>Chicago</option>
-                  <option>New York</option>
-                </select>
-              </div>
+                <div class="input" style="padding-top: 10px;">
+                    <textarea id="dispatchDetail" placeholder="Dispatch Detail..." rows="6"></textarea>
+                </div>
 
               <div class="input">
                 <textarea class="tagme" placeholder="This is a textarea"></textarea>
@@ -169,90 +207,10 @@
             </div>
           </div>
 
-          <div class="span6">
-
-            <div class="padded" style="padding-bottom: 0">
-              <div class="input">
-                <textarea placeholder="This is a textarea" rows="6"></textarea>
-              </div>
-
-              <div class="row-fluid">
-
-                <div class="span6">
-                  <div class="input">
-                    <input type="checkbox" id="ch1" class="normal-check"/>
-                    <label for="ch1">The number one option</label>
-                  </div>
-                  <div class="input">
-                    <input type="checkbox" id="ch2" class="normal-check"/>
-                    <label for="ch2">The number two option</label>
-                  </div>
-                </div>
-                <div class="span6">
-                  <div class="input">
-                    <input type="checkbox" id="ch3" class="normal-check"/>
-                    <label for="ch3">The number three option</label>
-                  </div>
-                  <div class="input">
-                    <input type="checkbox" id="ch4" class="normal-check"/>
-                    <label for="ch4">The number four option</label>
-                  </div>
-                </div>
-              </div>
-
-              <input id="datetimepicker" type="text" class="fill-up" value="jQuery date time picker">
-
-              <div class="row-fluid">
-
-                <div class="span6">
-                  <div class="input">
-                    <input type="radio" name="radios[]" id="rd1" class="normal-radio"/>
-                    <label for="rd1">The number one option</label>
-                  </div>
-
-                  <div class="input">
-                    <input type="radio" name="radios[]" id="rd2" class="normal-radio"/>
-                    <label for="rd2">The number two option</label>
-                  </div>
-                </div>
-                <div class="span6">
-                  <div class="input">
-                    <input type="radio" name="radios[]" id="rd3" class="normal-radio"/>
-                    <label for="rd3">The number two option</label>
-                  </div>
-                  <div class="input">
-                    <input type="radio" name="radios[]" id="rd4" class="normal-radio"/>
-                    <label for="rd4">The number four option</label>
-                  </div>
-                </div>
-              </div>
-              <div class="row-fluid">
-                <div class="span12">
-
-                  <div class="note large">
-                    <i class="icon-warning-sign"></i> Warning: You have to complete all fields
-                  </div>
-                  <div class="note large">
-                    <i class="icon-pencil"></i> Note: The checkboxes and radios are turned on-off entirely out of css. no javascript involved!
-                  </div>
-
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non felis non orci congue mollis. Sed euismod magna sed nunc dignissim tincidunt. Maecenas faucibus varius elit.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="form-actions">
-          <button type="submit" class="button blue">Save changes</button>
+          <button type="submit" class="button blue">Send Dispatch</button>
           <button type="button" class="button">Cancel</button>
-          <div class="pull-right">
-            <span class="checky-label-left">
-            </span>
-            <input type="checkbox" id="5Yg8C" class="checky" />
-            <label for="5Yg8C" class="checky"><span></span></label>
-          </div>
         </div>
       </form>
     </div>
@@ -291,7 +249,7 @@
     </div>
   </div>
 </script>
-<script src="../../javascripts/application.js" type="text/javascript"></script><script src="../../javascripts/docs.js" type="text/javascript"></script><script src="../../javascripts/docs_charts.js" type="text/javascript"></script><script src="../../javascripts/documentation.js" type="text/javascript"></script><script src="../../javascripts/prettify.js" type="text/javascript"></script><link href="../../stylesheets/prettify.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="js/application.js" type="text/javascript"></script><script src="js/docs.js" type="text/javascript"></script><script src="js/javascripts/docs_charts.js" type="text/javascript"></script><script src="js/javascripts/documentation.js" type="text/javascript"></script><script src="js/prettify.js" type="text/javascript"></script><link href=css/prettify.css" media="screen" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
     prettyPrint()
 </script>
