@@ -8,6 +8,10 @@
 <%@ page import="com.google.api.services.glass.model.Subscription" %>
 <%@ page import="com.google.api.services.glass.model.Attachment" %>
 
+<%@ page import="com.google.glassware.GlassStream" %>
+
+<%@ page import="com.google.appengine.api.datastore.PreparedQuery" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <%
@@ -20,6 +24,7 @@
     List<Subscription> subscriptions = GlassClient.listSubscriptions(credential).getItems();
 
 %>
+
 <html>
 <head>
   <meta charset="utf-8">
@@ -131,6 +136,28 @@
  
 
 <div class="row-fluid">
+<<<<<<< HEAD
+
+    <%
+        PreparedQuery reports = GlassStream.getReports();
+
+        for (com.google.appengine.api.datastore.Entity result : reports.asIterable()) {
+            String reportUrl = result.getProperty("media").toString();
+            String reportReporter = result.getProperty("reporter").toString();
+            String reportDate = result.getProperty("reportDate").toString();
+    %>
+
+    <div class="span4">
+        <div class="box">
+            <div class="tab-header">
+                <i class="icon-th-list"></i> Reporter: <%= reportReporter %>
+            </div>
+            <div class="padded">
+               <img src='<%= reportUrl %>'>
+               <div style='padding-top:10px;'><%= reportDate %>></div>
+            </div>
+        </div>
+=======
   <div class="span4">
     <div class="box">
       <div class="tab-header">
@@ -139,8 +166,14 @@
       <div class="padded">
         Breaking news: Large plumes of smoke seen across the Hudson River.
       </div>
+>>>>>>> 97a6549570310d6edee092081e4b180179f2937e
     </div>
-  </div>
+
+<%
+    }
+%>
+
+  <!--
   <div class="span4">
     <div class="box">
       <div class="tab-header">
@@ -160,7 +193,7 @@
         My cat's breath smells like cat food.
       </div>
     </div>
-  </div>
+  </div>-->
 </div>
 
 
