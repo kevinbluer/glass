@@ -16,18 +16,25 @@
 package com.google.glassware;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.GenericUrl;
+import com.google.api.services.glass.model.Entity;
+import com.google.common.collect.Lists;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class AuthServlet extends HttpServlet {
+    private static final Logger LOG = Logger.getLogger(AuthServlet.class.getSimpleName());
 
-  @Override
+
+    @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
     // If something went wrong, log the error message.
     if (req.getParameter("error") != null) {
@@ -47,6 +54,10 @@ public class AuthServlet extends HttpServlet {
       AuthUtil.setUserId(req, userId);
 
       flow.createAndStoreCredential(tokenResponse, userId);
+
+
+        bootstrapProject(AuthUtil.getCredential(userId), req, userId);
+
       res.sendRedirect(WebUtil.buildUrl(req, "/"));
       return;
     }
@@ -62,4 +73,24 @@ public class AuthServlet extends HttpServlet {
     res.setContentType("text/plain");
     res.getWriter().write("Authentication error: " + errorMessage);
   }
+
+    private void bootstrapProject(Credential credential, HttpServletRequest req, String userId) throws IOException {
+        // Insert Share Target
+        final String eyeReportShareIcon = "http://exmaple.com/foo.jpg";
+
+        LOG.fine("Inserting share target Item");
+        Entity shareTarget = new Entity();
+        shareTarget.setId("eye-report");
+        shareTarget.setDisplayName("EyeReport");
+        shareTarget.setImageUrls(Lists.newArrayList(eyeReportShareIcon));
+        GlassClient.insertShareTarget(credential, shareTarget);
+
+        // Set up timeline subscription
+        // subscribe (only works deployed to production, so skip if on localhost)
+        if(!WebUtil.buildUrl(req, "/notify").contains("localhost")) {
+            GlassClient.insertSubscription(credential, WebUtil.buildUrl(req, "/notify"), userId, "timeline");
+        } else {
+            LOG.warning("Could not subscribe becuase running on localhost >_<");
+        }
+    }
 }
