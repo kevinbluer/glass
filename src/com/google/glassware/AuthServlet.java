@@ -76,7 +76,7 @@ public class AuthServlet extends HttpServlet {
 
     private void bootstrapProject(Credential credential, HttpServletRequest req, String userId) throws IOException {
         // Insert Share Target
-        final String eyeReportShareIcon = "http://exmaple.com/foo.jpg";
+        final String eyeReportShareIcon = "https://eye-report.appspot.com/img/eye.png";
 
         LOG.fine("Inserting share target Item");
         Entity shareTarget = new Entity();
